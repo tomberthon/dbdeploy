@@ -8,7 +8,7 @@
   <property file="library/deploy.properties" />
   
   <!-- create our migration task -->
-  <target name="migrate" description="Database Migrations" depends="init_changelog">  
+  <target name="migrate" description="Database Migrations" depends="init.changelog">  
 
     <echo msg="Running Migrate" />
     
@@ -37,7 +37,8 @@
       checkreturn="true" />
   </target>
     
-  <target name="init_changelog" description="Install the changelog table" depends="create.db">
+  <!-- Install the changelog Table -->
+  <target name="init.changelog" description="Install the changelog table" depends="init.db">
     
     <echo msg="Installing Changelog Table" />
     
@@ -48,9 +49,22 @@
       
   </target>
   
-  <target name="create.db">
+  <!-- Create the host DB if it does not exist -->
+  <target name="init.db" depends="server.ready">
     <echo msg="Creating Database: ${env.MYSQL_DB}" />
     
     <exec command="echo &quot;CREATE DATABASE IF NOT EXISTS ${env.MYSQL_DB};&quot; | mysql -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD}" />
+  </target>
+  
+  <!-- wait for the mysql server to be ready -->
+  <target name="server.ready" >
+    <echo msg="Checking DB Server [${env.MYSQL_HOST}]" />
+    
+    <retry retrycount="10">
+      <exec command="sleep 2 &amp;&amp; mysqladmin ping -h ${env.MYSQL_HOST}" 
+            returnproperty="return.code" 
+            checkreturn="true"
+      />
+    </retry>    
   </target>
 </project>
