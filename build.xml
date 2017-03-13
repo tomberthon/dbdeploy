@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<project name="DBDeployDocker" basedir="." default="migrate">
+
+  <!-- Sets the DSTAMP, TSTAMP and TODAY properties -->
+  <tstamp/>
+
+  <!-- Load our configuration -->
+  <property file="library/deploy.properties" />
+  
+  <!-- create our migration task -->
+  <target name="migrate" description="Database Migrations" depends="init_changelog">  
+
+    <echo msg="Running Migrate" />
+    
+    <!-- load the dbdeploy task -->
+    <taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>
+
+    <!-- these two filenames will contain the generated SQL to do the deploy and roll it back-->
+    <property name="build.dbdeploy.deployfile" value="deploy-${DSTAMP}${TSTAMP}.sql" />
+    <property name="build.dbdeploy.undofile" value="undo-${DSTAMP}${TSTAMP}.sql" />
+
+    <echo msg="Generate Deploy scripts" />
+    <!-- generate the deployment scripts -->
+    <dbdeploy 
+      url="mysql:host=${env.MYSQL_HOST};dbname=${env.MYSQL_DB}" 
+      userid="${env.MYSQL_USER}" 
+      password="${env.MYSQL_PASSWORD}" 
+      dir="deploy" 
+      outputfile="${build.dir}/${build.dbdeploy.deployfile}" 
+      undooutputfile="${build.dir}/${build.dbdeploy.undofile}" />
+
+    <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
+    <echo msg="Import Deploy scripts" />
+    <exec
+      command="${progs.mysql} -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD} ${env.MYSQL_DB} &lt; ${build.dbdeploy.deployfile}"
+      dir="${build.dir}"
+      checkreturn="true" />
+  </target>
+    
+  <target name="init_changelog" description="Install the changelog table" depends="create.db">
+    
+    <echo msg="Installing Changelog Table" />
+    
+    <exec
+      command="${progs.mysql} -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD} ${env.MYSQL_DB} &lt; library/changelog.sql"
+      dir="."
+      checkreturn="true" />
+      
+  </target>
+  
+  <target name="create.db">
+    <echo msg="Creating Database: ${env.MYSQL_DB}" />
+    
+    <exec command="echo &quot;CREATE DATABASE IF NOT EXISTS ${env.MYSQL_DB};&quot; | mysql -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD}" />
+  </target>
+</project>
