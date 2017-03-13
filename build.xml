@@ -32,7 +32,7 @@
     <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
     <echo msg="Import Deploy scripts" />
     <exec
-      command="${progs.mysql} -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD} ${env.MYSQL_DB} &lt; ${build.dbdeploy.deployfile}"
+      command="${progs.mysql} -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD} --local-infile ${env.MYSQL_DB} &lt; ${build.dbdeploy.deployfile}"
       dir="${build.dir}"
       checkreturn="true" />
   </target>
