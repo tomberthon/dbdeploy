@@ -15,8 +15,11 @@ Anything you can run in your database can be included in these db deltas.
 
 Each delta will only be run once so no need to check in sql if a previous delta has to be run.
 
-every sql file MUST include a comment used to indicate 
+Every sql file MUST include the following comment intended to indicate the start of roll back statements for each db delta.
 
+```
+-- //@UNDO
+```
 ## How to run
 ```
 Docker run -eHOST={db host} -eUSER={db user} -ePASS={db password} -eDB={database name} -v {your delta Dir}:/app/dbdeploy/deltas tomberthon/dbdeploy
