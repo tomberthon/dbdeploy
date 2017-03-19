@@ -9,11 +9,11 @@ RUN pear channel-discover pear.phing.info && \
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-RUN mkdir /tmp/dbdeploy /tmp/dbdeploy/build
+RUN mkdir /app/dbdeploy /app/dbdeploy/build
 
-COPY library /tmp/dbdeploy/library
-COPY build.xml /tmp/dbdeploy
+COPY library /app/dbdeploy/library
+COPY build.xml /app/dbdeploy
 
-WORKDIR /tmp/dbdeploy
+WORKDIR /app/dbdeploy
 
 CMD phing

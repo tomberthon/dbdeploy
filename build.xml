@@ -22,17 +22,17 @@
     <echo msg="Generate Deploy scripts" />
     <!-- generate the deployment scripts -->
     <dbdeploy 
-      url="mysql:host=${env.MYSQL_HOST};dbname=${env.MYSQL_DB}" 
-      userid="${env.MYSQL_USER}" 
-      password="${env.MYSQL_PASSWORD}" 
-      dir="deploy" 
+      url="mysql:host=${env.HOST};dbname=${env.DB}" 
+      userid="${env.USER}" 
+      password="${env.PASSWORD}" 
+      dir="${delta.dir}" 
       outputfile="${build.dir}/${build.dbdeploy.deployfile}" 
       undooutputfile="${build.dir}/${build.dbdeploy.undofile}" />
 
     <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
     <echo msg="Import Deploy scripts" />
     <exec
-      command="${progs.mysql} -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD} --local-infile ${env.MYSQL_DB} &lt; ${build.dbdeploy.deployfile}"
+      command="${progs.mysql} -h${env.HOST} -u${env.USER} -p${env.PASSWORD} --local-infile ${env.DB} &lt; ${build.dbdeploy.deployfile}"
       dir="${build.dir}"
       checkreturn="true" />
   </target>
@@ -43,7 +43,7 @@
     <echo msg="Installing Changelog Table" />
     
     <exec
-      command="${progs.mysql} -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD} ${env.MYSQL_DB} &lt; library/changelog.sql"
+      command="${progs.mysql} -h${env.HOST} -u${env.USER} -p${env.PASSWORD} ${env.DB} &lt; library/changelog.sql"
       dir="."
       checkreturn="true" />
       
@@ -51,17 +51,17 @@
   
   <!-- Create the host DB if it does not exist -->
   <target name="init.db" depends="server.ready">
-    <echo msg="Creating Database: ${env.MYSQL_DB}" />
+    <echo msg="Creating Database: ${env.DB}" />
     
-    <exec command="echo &quot;CREATE DATABASE IF NOT EXISTS ${env.MYSQL_DB};&quot; | mysql -h${env.MYSQL_HOST} -u${env.MYSQL_USER} -p${env.MYSQL_PASSWORD}" />
+    <exec command="echo &quot;CREATE DATABASE IF NOT EXISTS ${env.DB};&quot; | mysql -h${env.HOST} -u${env.USER} -p${env.PASSWORD}" />
   </target>
   
   <!-- wait for the mysql server to be ready -->
   <target name="server.ready" >
-    <echo msg="Checking DB Server [${env.MYSQL_HOST}]" />
+    <echo msg="Checking DB Server [${env.HOST}]" />
     
     <retry retrycount="10">
-      <exec command="sleep 2 &amp;&amp; mysqladmin ping -h ${env.MYSQL_HOST}" 
+      <exec command="sleep 2 &amp;&amp; mysqladmin ping -h ${env.HOST}" 
             returnproperty="return.code" 
             checkreturn="true"
       />
