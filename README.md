@@ -18,9 +18,9 @@ Each delta will only be run once so no need to check in sql if a previous delta 
 every sql file MUST include a comment used to indicate 
 
 ## How to run
-
+```
 Docker run -eHOST={db host} -eUSER={db user} -ePASS={db password} -eDB={database name} -v {your delta Dir}:/app/deltas tomberthon/dbdeploy
-
+```
 ## Compatibility
  - Mysql 5.5+
  - The rest is dependent on your SQL statements
