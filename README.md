@@ -29,3 +29,4 @@ Docker run -eHOST={db host} -eUSER={db user} -ePASS={db password} -eDB={database
  - Mysql 5.5+
  - The rest is dependent on your SQL statements
 
+
