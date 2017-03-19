@@ -1,5 +1,5 @@
 # DBDeploy
-## Control your Database Scheme and manage migration to your next iteration
+## Control your Database Schema and manage migrations
 
 DBDeploy manages the migration of your database scheme when you need to create new or update existing databases.
 
@@ -19,7 +19,7 @@ every sql file MUST include a comment used to indicate
 
 ## How to run
 ```
-Docker run -eHOST={db host} -eUSER={db user} -ePASS={db password} -eDB={database name} -v {your delta Dir}:/app/deltas tomberthon/dbdeploy
+Docker run -eHOST={db host} -eUSER={db user} -ePASS={db password} -eDB={database name} -v {your delta Dir}:/app/dbdeploy/deltas tomberthon/dbdeploy
 ```
 ## Compatibility
  - Mysql 5.5+
