@@ -24,6 +24,7 @@ Every sql file MUST include the following comment intended to indicate the start
 ```
 Docker run -eHOST={db host} -eUSER={db user} -ePASS={db password} -eDB={database name} -v {your delta Dir}:/app/dbdeploy/deltas tomberthon/dbdeploy
 ```
+
 ## Compatibility
  - Mysql 5.5+
  - The rest is dependent on your SQL statements
