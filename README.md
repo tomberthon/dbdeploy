@@ -1,5 +1,5 @@
 # DBDeploy
-## Control your Database Scheme and manage migration to your next iteration
+## Control your Database Schema and manage migrations
 
 DBDeploy manages the migration of your database scheme when you need to create new or update existing databases.
 
