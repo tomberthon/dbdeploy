@@ -61,7 +61,7 @@
     <echo msg="Checking DB Server [${env.HOST}]" />
     
     <retry retrycount="10">
-      <exec command="sleep 2 &amp;&amp; mysqladmin ping -h ${env.HOST}" 
+      <exec command="sleep 2 &amp;&amp; mysqladmin ping -h ${env.HOST} -u${env.USER} -p${env.PASSWORD} " 
             returnproperty="return.code" 
             checkreturn="true"
       />
