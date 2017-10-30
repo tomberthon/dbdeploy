@@ -1,0 +1,25 @@
+version: '2'
+services:
+  db:
+    image: mariadb
+    environment:
+     - MYSQL_ROOT_PASSWORD=fred
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    ports: 
+    - "3001:80"
+    links: 
+    - db:db 
+  dbdeploy:
+    build: .
+    environment:
+     - HOST=db
+     - USER=root
+     - PASSWORD=fred
+     - DB=example_db
+    volumes:
+     - ./example:/app/dbdeploy/deltas 
+    links:
+    - db:db
+
+  
